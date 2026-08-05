@@ -5,7 +5,7 @@ infobox = {}
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
 }
-response = requests.get("https://en.wikipedia.org/wiki/World_War_II", headers=headers)
+response = requests.get("https://en.wikipedia.org/wiki/Python_(programming_language)", headers=headers)
 if response.status_code == 200:
     html = response.text
     soup = BeautifulSoup(html, "lxml")
@@ -21,9 +21,16 @@ if response.status_code == 200:
             continue
         else:
             th = t.find('th').text.strip()
-            td = t.find('td').text.strip()
-            dic = dict(th=td)
-    print(dic)
+            td_l = t.find('td')
+            td = td_l.get_text(" ", strip=True)
+
+    # Table of Contents(id="vector-toc")
+    # Images
+    # References
+    # External Links
+    # Categories
+    # Internal Links
+    # Statistics
    
 else:
     print(f"Error {response.status_code}")
