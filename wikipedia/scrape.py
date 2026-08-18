@@ -1,7 +1,35 @@
 import requests
 from bs4 import BeautifulSoup
 
-infobox = {}
+def infobox(): 
+    info = {}
+    table = soup.find('table', "infobox vevent")
+    for sup in table.find_all("sup"):
+        sup.decompose()
+    for tr in table.find_all('tr'):
+        if tr.th != None:
+            value = tr.th.next_sibling
+            if value == None:
+                ky = tr.th.text.strip()
+                nxt = tr.next_sibling
+                if nxt.td != None:
+                    vl = nxt.get_text(" ", strip=True)
+                    if not vl or not ky:
+                        continue
+                    else:
+                        info[ky] = vl
+                        
+            elif value.name == 'td':
+                ky = tr.th.text.strip()
+                vl = value.get_text(" ", strip=True)
+                if not vl or not ky:
+                    continue
+                else:
+                    info[ky] = vl
+
+    return info
+
+referense = []
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
 }
@@ -15,18 +43,16 @@ if response.status_code == 200:
     first_para = p[1].text.strip()
 
     # infobox
-    infobox = soup.find('table', 'infobox vevent')
-    for t in infobox.find_all('tr'):
-        if t.find('th') is None or t.find('td') is None:
-            continue
-        else:
-            th = t.find('th').text.strip()
-            td_l = t.find('td')
-            td = td_l.get_text(" ", strip=True)
+    print(len(infobox()))
 
-    # Table of Contents(id="vector-toc")
+    # Table of Contents()
+    #contents = soup.find('ul', "vector-toc-contents")
+    #for ls in contents.find_all('li', "vector-toc-list-item vector-toc-level-1"):
+    #    word = ls.get_text(" ", strip=True)
     # Images
-    # References
+    # Referencescite class=
+    #for i in soup.find_all("cite", "citation web cs1"):
+    #    referense.append(i.get_text(" ", strip=True))
     # External Links
     # Categories
     # Internal Links
