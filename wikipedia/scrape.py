@@ -29,8 +29,26 @@ def infobox(soup):
 
     return info
 
-def main():
+def content(soup):
     content = []
+    contents = soup.find('ul', "vector-toc-contents")
+    for ls in contents.find_all('li', "vector-toc-list-item vector-toc-level-1"):
+        if ls.div.span != None:
+            cntnt = ls.div.find_all('span')[1].text.strip()
+            if ls.ul.li != None:
+                ct = []
+                sub_content = {}
+                for l in ls.ul.find_all('li'):
+                    cntnt_l = l.div.find_all('span')[1].text.strip()
+                    ct.append(cntnt_l)
+                sub_content[cntnt] = ct
+                content.append(sub_content)
+            else:
+                content.append(cntnt)
+
+    return content
+
+def main():
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
     }
@@ -43,17 +61,6 @@ def main():
         p = soup.find_all('p')
         first_para = p[1].text.strip()
 
-        # Table of Contents()
-        contents = soup.find('ul', "vector-toc-contents")
-        for ls in contents.find_all('li', "vector-toc-list-item vector-toc-level-1"):
-            word = ls.div.find_all('span')
-            if ls.div.span == None:
-                continue
-            else:
-                word = ls.div.find_all('span')
-                new_word = word[1].text.strip()
-                content.append(new_word)
-        print(content)
         # Images
         # Referencescite class=
         #for i in soup.find_all("cite", "citation web cs1"):
