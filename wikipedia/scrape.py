@@ -1,6 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
 
+def refer(soup):
+    rfrnc = []
+    reference = soup.find('div', "mw-references-wrap mw-references-columns")
+    for ls in reference.find_all('li'):
+        sp = ls.find_all('span')[2].text.strip()
+        rfrnc.append(sp)
+
+    return rfrnc
+
 def infobox(soup): 
     info = {}
     table = soup.find('table', "infobox vevent")
@@ -62,9 +71,6 @@ def main():
         first_para = p[1].text.strip()
 
         # Images
-        # Referencescite class=
-        #for i in soup.find_all("cite", "citation web cs1"):
-        #    referense.append(i.get_text(" ", strip=True))
         # External Links
         # Categories
         # Internal Links
