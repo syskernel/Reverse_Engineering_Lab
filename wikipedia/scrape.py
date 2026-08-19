@@ -1,6 +1,25 @@
 import requests
 from bs4 import BeautifulSoup
 
+def internal_links(soup):
+    links = []
+    for a in soup.find_all("a", href=True):
+        href = a['href']
+        if href.startswith("https://en.wikipedia.org/wiki/"):
+            links.append(a.get('href'))
+
+    return links
+
+def external_links(soup):
+    links = {}
+    external = soup.find('ul', id="mwEkc" )
+    for ls in external.find_all('li'):
+        ky = ls.get_text(" ", strip=True)
+        vl = ls.a.get('href')
+        links[ky] = vl
+
+    return links
+
 def refer(soup):
     rfrnc = []
     reference = soup.find('div', "mw-references-wrap mw-references-columns")
@@ -66,14 +85,12 @@ def main():
         html = response.text
         soup = BeautifulSoup(html, "lxml")
         title = soup.find(id="firstHeading").text.strip()
-        last_modified_date = soup.find(id="footer-info-lastmod").text.strip().removeprefix("This page was last edited on ")
-        p = soup.find_all('p')
-        first_para = p[1].text.strip()
+        last_modified_date = soup.find(id="footer-info-lastmod").text.strip().removeprefix("This page was last edited on ") 
+        first_para = soup.find_all('p')[1].text.strip()
 
         # Images
-        # External Links
         # Categories
-        # Internal Links
+
         # Statistics
     
     else:
