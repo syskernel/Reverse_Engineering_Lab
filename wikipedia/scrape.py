@@ -87,13 +87,10 @@ def main():
         title = soup.find(id="firstHeading").text.strip()
         last_modified_date = soup.find(id="footer-info-lastmod").text.strip().removeprefix("This page was last edited on ") 
         first_para = soup.find_all('p')[1].text.strip()
+        return title, last_modified_date, first_para
 
-        # Images
-        # Categories
-
-        # Statistics
-    
     else:
         print(f"Error {response.status_code}")
 
-main()
+if __name__ == '__main__':
+    TITLE, LAST_DATE, FIRST_PARA = main()
