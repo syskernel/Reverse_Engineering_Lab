@@ -23,8 +23,17 @@ if response.status_code == 200:
                     vl = a.get('href')
                     if vl.startswith('/'):
                         vl = url + vl.removeprefix('/')
-                    links[ky] = vl
+                    if ky == "new":
+                        new_ky = a.find_previous_sibling('a').text + " " + ky.capitalize()
+                        links[new_ky] = vl
+                        for i in a.find_next_siblings('a', limit=2):
+                            new_ky = a.find_previous_sibling('a').text + " " + i.text.capitalize()
+                            links[new_ky] = vl
+                    elif ky == "recent" or ky == "search":
+                        continue
+                    else:
+                        new_ky = ky
+                        links[new_ky] = vl
+                    
 else:
     print(f"Error {response.status_code}/n{response.text}")
-
-print(links)
