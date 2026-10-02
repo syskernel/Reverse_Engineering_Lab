@@ -1,6 +1,7 @@
 # Build a CLI program where you give it a research keyword, and it returns a structured list of relevant papers.
 import requests
 from bs4 import BeautifulSoup
+import json
 
 links = {}
 headers = {
@@ -37,8 +38,9 @@ if response.status_code == 200:
                     else:
                         new_ky = ky
                         links[new_ky] = vl
-                    
+
+    with open("researchpaper_links.json", 'w') as file:
+        json.dump(links, file, indent=4)
+                
 else:
     print(f"Error {response.status_code}/n{response.text}")
-
-print(links.values())
