@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright, Playwright
+import sys
 
-package = "ex"                     # express / ex
-def run(playwright: Playwright): 
+def run(playwright: Playwright, package): 
     dependency = []
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context(viewport={"height": 800, "width": 1280})
@@ -19,11 +19,16 @@ def run(playwright: Playwright):
     page.locator('//a[@id="package-tab-dependencies"]').click()
     for row in page.locator('//ul[@aria-label="Dependencies"]').get_by_role("listitem").all():
         dependency.append(row.text_content())
-    dependency = ",".join(dependency)
+    dependency = ", ".join(dependency)
 
     print("Name: ",name, "| Version: ",version, "| License: ",license, "| Weekely Downloads: ",downloads, "| Repository: ", repository, "| Homepage: ", homepage, "| Dependencies: ", dependency)
     page.wait_for_timeout(3000)
     browser.close()
 
-with sync_playwright() as playwright:
-    run(playwright)
+def main():
+    pkg = sys.argv[1]
+    with sync_playwright() as playwright:
+        run(playwright, pkg)
+
+if __name__ == "__main__":
+    main()
