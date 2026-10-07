@@ -26,9 +26,14 @@ def run(playwright: Playwright, package):
     browser.close()
 
 def main():
-    pkg = sys.argv[1]
-    with sync_playwright() as playwright:
-        run(playwright, pkg)
+    if len(sys.argv) < 2:
+        print("Please enter the package you want to search! ")
+    elif len(sys.argv) > 2:
+        print("Pleae enter one package at a time!")
+    else:
+        pkg = sys.argv[1]
+        with sync_playwright() as playwright:
+            run(playwright, pkg)
 
 if __name__ == "__main__":
     main()
